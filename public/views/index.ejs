@@ -2,6 +2,18 @@
 <html lang="en">
   <% include partials/head %>
   <body>
-    iine
+    <% if (typeof user !== 'undefined' && user) { %>
+      <%= user.first_name %>
+      <a class="navbar-item is-white" href="/logout">
+        Log out
+      </a>
+    <% } else { %>
+      <a class="navbar-item is-white" href="/login">
+        Log in
+      </a>
+      <a class="navbar-item is-white" href="/signup">
+        Sign up
+      </a>
+    <% } %>
   </body>
 </html>

@@ -9,9 +9,13 @@
   "author": "Brandon Cardoso",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-mysql-session": "^2.1.0",
+    "express-session": "^1.16.1",
+    "lodash": "^4.17.11",
     "mysql2": "^1.6.5",
     "sequelize": "^5.8.4"
   }
