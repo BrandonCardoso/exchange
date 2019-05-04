@@ -89,14 +89,13 @@ function encryptPassword(password) {
 }
 
 function create(data, options) {
-  console.log(data)
   return UserModel.create(data, options)
 }
 
 function authenticate(email, password) {
   return UserModel.findOne({
     where: { email: email },
-    attributes: ['user_id', 'password']
+    attributes: ['user_id', 'first_name', 'password']
   }, {
     raw: true
   })
@@ -106,15 +105,15 @@ function authenticate(email, password) {
       err.code = 'USER_NOT_FOUND'
       throw err
     }
-    return [user.user_id, bcrypt.compare(password, user.password)]
+    return [user, bcrypt.compare(password, user.password)]
   })
-  .spread((userId, isSamePassword) => {
+  .spread((user, isSamePassword) => {
     if (!isSamePassword) {
       let err = new Error('Wrong password')
       err.code = 'WRONG_PASSWORD'
       throw err
     }
-    return userId
+    return { userId: user.user_id, firstName: user.first_name }
   })
 }
 

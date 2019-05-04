@@ -22,8 +22,9 @@ function signup(req, res) {
 
 function authenticate(req, res, next) {
   User.authenticate(_.get(req, 'body.useremail'), _.get(req, 'body.userpassword'))
-    .then(userId => {
-      _.set(req.session, 'user_id', userId)
+    .then((userInfo) => {
+      _.set(req.session, 'user_id', userInfo.userId)
+      _.set(req.session, 'user_first_name', userInfo.firstName)
       res.redirect('/')
     })
     .catch((err) => {
