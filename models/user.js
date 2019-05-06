@@ -53,13 +53,8 @@ const UserModel = database.define('user', {
 UserModel.beforeCreate(encryptPasswordIfChanged)
 UserModel.beforeUpdate(encryptPasswordIfChanged)
 
-
-// foreign keys
-
-
 // sync
 UserModel.sync().then(() => console.log('User table synced.'))
-
 
 // functions
 function encryptPasswordIfChanged(user, options) {

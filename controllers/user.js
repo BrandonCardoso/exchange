@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const Sequelize = require('sequelize')
 
 const User = require('../models/User')
 
