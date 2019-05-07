@@ -1,6 +1,17 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
-  const User_Role = sequelize.define('User_Role', {}, {})
+  const User_Role = sequelize.define('User_Role', {
+    created_at: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
+  }, {})
 
   User_Role.associate = function(models) {
     User_Role.belongsTo(models.User, {

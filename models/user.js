@@ -33,6 +33,16 @@ module.exports = (sequelize, DataTypes) => {
         len: [8, 72]
       }
     },
+    created_at: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     underscored: true,
     hooks: {

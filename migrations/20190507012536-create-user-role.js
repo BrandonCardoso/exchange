@@ -24,18 +24,19 @@ module.exports = {
           key: 'role_id'
         }
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     })
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('User_Roles')
-
   }
 }
