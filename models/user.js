@@ -1,79 +1,91 @@
-const _ = require('lodash')
-const Sequelize = require('sequelize')
+'use strict'
 const bcrypt = require('bcrypt')
-
-const database = require('../app/database')
-
 const saltRounds = 10
 
-const UserModel = database.define('user', {
-  user_id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false
-  },
-  first_name: {
-    type: Sequelize.TEXT('tiny'),
-    allowNull: false,
-    validate: {
-      isAlpha: true
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    user_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
+    first_name: {
+      type: DataTypes.TEXT('tiny'),
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.TEXT('tiny'),
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING(256),
+      unique: true,
+      allowNull: false,
+      validate: {
+        isEmail: true
+      }
+    },
+    password: {
+      type: DataTypes.CHAR(60),
+      allowNull: false,
+      validate: {
+        len: [8, 72]
+      }
+    },
+  }, {
+    underscored: true,
+    hooks: {
+      beforeCreate: encryptPassword,
+      beforeUpdate: encryptPasswordIfChanged
     }
-  },
-  last_name: {
-    type: Sequelize.TEXT('tiny'),
-    allowNull: false,
-    validate: {
-      isAlpha: true
-    }
-  },
-  email: {
-    type: Sequelize.STRING(256),
-    unique: true,
-    allowNull: false,
-    validate: {
-      isEmail: true
-    }
-  },
-  password: {
-    type: Sequelize.CHAR(60),
-    allowNull: false,
-    validate: {
-      len: [8, 72]
-    }
-  },
-  'signup_date': {
-    type: Sequelize.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW
+  })
+
+  User.associate = (models) => {
+    User.hasMany(models.User_Role, {
+      foreignKey: 'user_id',
+      onDelete: 'CASCADE'
+    })
   }
-})
 
-// hooks
-UserModel.beforeCreate(encryptPasswordIfChanged)
-UserModel.beforeUpdate(encryptPasswordIfChanged)
+  // class functions
+  User.authenticate = function(email, password) {
+    return this.findOne({
+      where: { email },
+      attributes: ['user_id', 'first_name', 'password']
+    }, {
+      raw: true
+    })
+      .then((user) => {
+        return [user, user.authenticate(password)]
+      })
+      .spread((user, authenticated) => {
+        if (!authenticated) {
+          let err = new Error('Wrong password.')
+          err.code = 'WRONG_PASSWORD'
+          throw err
+        }
+        return { userId: user.user_id, firstName: user.first_name }
+      })
+  }
 
-// sync
-UserModel.sync().then(() => console.log('User table synced.'))
+  // instance functions
+  User.prototype.authenticate = function(password) {
+    return bcrypt.compare(password, this.password)
+  }
 
-// functions
+  return User
+}
+
 function encryptPasswordIfChanged(user, options) {
   if (_.get(user, '_options.isNewRecord') || user.changed('password')) {
-    return encryptPassword(_.get(user, 'password'))
-      .then((success) => {
-        user.password = success
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err)
-        }
-      })
+    return encryptPassword(user)
   }
 }
 
-function encryptPassword(password) {
+function encryptPassword(user, options) {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, saltRounds, (err, hash) => {
+    bcrypt.hash(user.password, saltRounds, (err, hash) => {
       if (err) {
         return reject(err)
       } else {
@@ -81,39 +93,12 @@ function encryptPassword(password) {
       }
     })
   })
-}
-
-function create(data, options) {
-  return UserModel.create(data, options)
-}
-
-function authenticate(email, password) {
-  return UserModel.findOne({
-    where: { email: email },
-    attributes: ['user_id', 'first_name', 'password']
-  }, {
-    raw: true
-  })
-  .then((user) => {
-    if (!user) {
-      let err = new Error('User not found')
-      err.code = 'USER_NOT_FOUND'
-      throw err
-    }
-    return [user, bcrypt.compare(password, user.password)]
-  })
-  .spread((user, isSamePassword) => {
-    if (!isSamePassword) {
-      let err = new Error('Wrong password')
-      err.code = 'WRONG_PASSWORD'
-      throw err
-    }
-    return { userId: user.user_id, firstName: user.first_name }
-  })
-}
-
-module.exports = {
-  UserModel,
-  create,
-  authenticate
+    .then((success) => {
+      user.password = success
+    })
+    .catch((err) => {
+      if (err) {
+        console.log(err)
+      }
+    })
 }

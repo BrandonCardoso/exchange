@@ -2,12 +2,6 @@ const express = {
   port: process.env.EXPRESS_PORT || 3000
 }
 
-const database = {
-  host: process.env.DB_HOST || 'localhost',
-  user: 'root',
-  pw: ''
-}
-
 const sessionSecret = '123123123'
 const sessionStore = {
   host: 'localhost',
@@ -19,7 +13,6 @@ const sessionStore = {
 
 module.exports = {
   express,
-  database,
   sessionStore,
   sessionSecret
 }

@@ -1,18 +1,18 @@
-const Sequelize = require('sequelize')
+'use strict'
+module.exports = (sequelize, DataTypes) => {
+  const User_Role = sequelize.define('User_Role', {}, {})
 
-const database = require('../app/database')
-const UserModel = require('./user').UserModel
-const RoleModel = require('./role').RoleModel
+  User_Role.associate = function(models) {
+    User_Role.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      onDelete: 'CASCADE'
+    })
 
-const User_RoleModel = database.define('user_role')
+    User_Role.belongsTo(models.Role, {
+      foreignKey: 'role_id',
+      onDelete: 'CASCADE'
+    })
+  }
 
-// foreign keys
-User_RoleModel.belongsTo(UserModel, { as: user_id })
-User_RoleModel.belongsTo(RoleModel, { as: role_id })
-
-// sync
-User_RoleModel.sync().then(() => console.log('User_Role table synced.'))
-
-module.exports = {
-  User_RoleModel
+  return User_Role
 }

@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-const User = require('../models/User')
+const User = require('../models').User
 
 function login(req, res) {
   res.render('login')

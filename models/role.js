@@ -1,25 +1,24 @@
-const Sequelize = require('sequelize')
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Role = sequelize.define('Role', {
+    role_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoincrement: true,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.TEXT('tiny'),
+      allowNull: false
+    }
+  }, {})
 
-const database = require('../app/database')
-
-const RoleModel = database.define('role', {
-  role_id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-    allowNull: false
-  },
-  name: {
-    type: Sequelize.TEXT('tiny'),
-    allowNull: false
+  Role.associate = (models) => {
+    Role.hasMany(models.User_Role, {
+      foreignKey: 'role_id',
+      onDelete: 'CASCADE'
+    })
   }
-})
 
-// sync
-RoleModel.sync().then(() => console.log('Role table synced.')).then(() => {
-  RoleModel.BulkInsert([ { { name: 'Organizer' }, { name: 'Admin' } ])
-})
-
-module.exports = {
-  RoleModel
+  return Role
 }
