@@ -1,4 +1,5 @@
 'use strict'
+const User = require('../models').User
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -7,35 +8,31 @@ module.exports = {
       { role_id: 2, name: 'Admin' }
     ])
     .then(() => {
-      return queryInterface.bulkInsert('Users', [
+      return User.bulkCreate([
         {
           user_id: 1,
           email: 'admin@testaccount.com',
           first_name: 'Admin',
           last_name: 'Account',
-          password: 'test1234',
-          created_at: new Date(),
-          updated_at: new Date()
+          password: 'test1234'
         },
         {
           user_id: 2,
           email: 'organizer@testaccount.com',
           first_name: 'Organizer',
           last_name: 'Account',
-          password: 'test1234',
-          created_at: new Date(),
-          updated_at: new Date()
+          password: 'test1234'
         },
         {
           user_id: 3,
           email: 'user@testaccount.com',
           first_name: 'User',
           last_name: 'Account',
-          password: 'test1234',
-          created_at: new Date(),
-          updated_at: new Date()
+          password: 'test1234'
         }
-      ])
+      ], {
+        individualHooks: true
+      })
     })
     .then(() => {
       return queryInterface.bulkInsert('User_Roles', [
