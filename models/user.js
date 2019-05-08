@@ -52,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   User.associate = (models) => {
-    User.hasMany(models.User_Role, {
-      foreignKey: 'user_id',
+    User.belongsToMany(models.Role, {
+      through: 'User_Roles',
       onDelete: 'CASCADE'
     })
   }
