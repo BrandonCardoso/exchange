@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT('tiny'),
       allowNull: false
     }
-  }, {})
+  }, {
+    underscored: true
+  })
 
   Role.associate = (models) => {
     Role.hasMany(models.User_Role, {

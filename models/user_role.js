@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     }
-  }, {})
+  }, {
+    underscored: true
+  })
 
   User_Role.associate = function(models) {
     User_Role.belongsTo(models.User, {
