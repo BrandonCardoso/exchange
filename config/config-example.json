@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "root",
+    "user": "root",
+    "password": null,
+    "database": "exchange_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": "3306",
+    "sessionSecret": "123456789"
+  },
+  "test": {
+    "username": "root",
+    "user": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": "3306",
+    "sessionSecret": "123456789"
+  },
+  "production": {
+    "username": "root",
+    "user": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": "3306",
+    "sessionSecret": "123456789"
+  }
+}

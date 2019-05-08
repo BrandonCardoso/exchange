@@ -4,7 +4,7 @@ const MySqlStore = require('express-mysql-session')(session)
 const mysql = require('mysql2')
 const bodyParser = require('body-parser')
 const middleware = require('./middleware')
-const config = require('./config')
+const config = require('../config/config')
 
 const app = express()
 
@@ -14,10 +14,11 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-const connection = mysql.createConnection(config.sessionStore)
-const sessionStore = new MySqlStore(config.sessionStore)
+process.env.ENV = 'development'
+const connection = mysql.createConnection(config[process.env.ENV])
+const sessionStore = new MySqlStore(config[process.env.ENV])
 app.use(session({
-  secret: config.sessionSecret,
+  secret: config[process.env.ENV].sessionSecret,
   resave: false,
   saveUninitialized: true,
   store: sessionStore
@@ -26,4 +27,5 @@ app.use(middleware.user)
 
 const routes = require('./routes')(app)
 
-app.listen(config.express.port, () => console.log('Listening on port', config.express.port))
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log('Listening on port', port))
