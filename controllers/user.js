@@ -21,9 +21,9 @@ function signup(req, res) {
 
 function authenticate(req, res, next) {
   User.authenticate(_.get(req, 'body.useremail'), _.get(req, 'body.userpassword'))
-    .then((userInfo) => {
-      _.set(req.session, 'user_id', userInfo.userId)
-      _.set(req.session, 'user_first_name', userInfo.firstName)
+    .then((result) => {
+      _.set(req.session, 'user', result.user)
+      _.set(req.session, 'roles', result.roles)
       res.redirect('/')
     })
     .catch((err) => {
@@ -49,7 +49,14 @@ function registerUser(req, res, next) {
     raw: true
   })
   .then((user) => {
-    _.set(req.session, 'user_id', user.user_id)
+    return [
+      user.get({ plain: true }),
+      user.getRoles({ raw: true })
+    ]
+  })
+  .spread((user, roles) => {
+    _.set(req.session, 'user', _.pick(user, ['user_id', 'first_name']))
+    _.set(req.session, 'roles', roles)
     res.redirect('/')
   })
   .catch(err => {

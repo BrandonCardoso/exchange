@@ -1,4 +1,5 @@
 'use strict'
+const _ = require('lodash')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
@@ -54,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.belongsToMany(models.Role, {
       through: 'User_Roles',
+      foreignKey: 'user_id',
       onDelete: 'CASCADE'
     })
   }
@@ -67,21 +69,38 @@ module.exports = (sequelize, DataTypes) => {
       raw: true
     })
       .then((user) => {
-        return [user, user.authenticate(password)]
+        return [
+          user.get({ plain: true }),
+          user.authenticate(password),
+          user.getRoles({ raw: true })
+        ]
       })
-      .spread((user, authenticated) => {
+      .spread((user, authenticated, roles) => {
         if (!authenticated) {
           let err = new Error('Wrong password.')
           err.code = 'WRONG_PASSWORD'
           throw err
         }
-        return { userId: user.user_id, firstName: user.first_name }
+
+        return {
+          user: _.omit(user, ['password']),
+          roles }
       })
   }
 
   // instance functions
   User.prototype.authenticate = function(password) {
     return bcrypt.compare(password, this.password)
+  }
+
+  User.prototype.isOrganizer = function() {
+    const roles = this.getRoles({ raw: true })
+    return _.some(roles, (role) => role.name === 'Organizer')
+  }
+
+  User.prototype.isAdmin = function() {
+    const roles = this.getRoles({ raw: true })
+    return _.some(roles, (role) => role.name === 'Admin')
   }
 
   return User

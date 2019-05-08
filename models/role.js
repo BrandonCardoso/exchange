@@ -12,12 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    underscored: true
+    underscored: true,
+    timestamps: false
   })
 
   Role.associate = (models) => {
     Role.belongsToMany(models.User, {
       through: 'User_Roles',
+      foreignKey: 'role_id',
       onDelete: 'CASCADE'
     })
   }
