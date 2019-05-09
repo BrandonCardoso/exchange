@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT('tiny'),
       allowNull: false
     },
+    description: {
+      type: DataTypes.TEXT(),
+    },
     start_time: {
       type: DataTypes.DATE,
       allowNull: false

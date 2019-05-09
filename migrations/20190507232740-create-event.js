@@ -12,6 +12,9 @@ module.exports = {
       type: Sequelize.TEXT('tiny'),
       allowNull: false
     },
+    description: {
+      type: Sequelize.TEXT(),
+    },
     start_time: {
       type: Sequelize.DATE,
       allowNull: false
