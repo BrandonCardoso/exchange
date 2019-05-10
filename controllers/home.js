@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const moment = require('moment')
 
 const User = require('../models').User
 const Event = require('../models').Event
@@ -13,11 +14,13 @@ function isOrganizer(res) {
 }
 
 function home(req, res, next) {
-  Event.findAll({ raw: true })
+  Event.getAllGroupedByDay()
     .then((events) => {
-      _.set(res.locals, 'events', events)
-      _.set(res.locals, 'userIsOrganizer', isOrganizer(res))
-      res.render('index')
+      res.render('index', {
+        events,
+        userIsOrganizer: isOrganizer(res),
+        moment
+      })
     })
     .catch((err) => {
       console.error(err)

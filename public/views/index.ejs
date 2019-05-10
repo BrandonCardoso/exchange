@@ -5,25 +5,40 @@
     <% include partials/topbar %>
     <div class="section">
       <div class="container">
-        <div class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <span class="title is-5">Upcoming events...</span>
-            </div>
+        <div class="columns">
+          <div class="column is-one-third">
+            <h1 class="title is-3">Welcome to いいね!</h1>
+            <h3 class="subtitle is-4">What is this?</h3>
+            <p>
+            The hottest new Japanese-English language exchange!
+            Join an event and start meeting new people, doing fun things,
+            learning useful skills, and practising your english or japanese language skills!
+            いいね?
+            </p>
           </div>
-          <% if (locals.userIsOrganizer) { %>
-          <div class="level-right">
-            <div class="level-item">
-              <a class="button is-primary" href="/new-event">New Event</a>
+          <div class="column is-two-thirds">
+            <div class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">
+                  <span class="title is-5">Upcoming events...</span>
+                </div>
+              </div>
+              <% if (locals.userIsOrganizer) { %>
+              <div class="level-right">
+                <div class="level-item">
+                  <a class="button is-primary" href="/new-event">New Event</a>
+                </div>
+              </div>
+              <% } %>
             </div>
+            <% for (const day of locals.events) { %>
+              <h1 class="title is-6 is-uppercase"><%= day.date %></h1>
+              <% for (const event of day.events) { %>
+                <% include partials/event-card %>
+              <% } %>
+              <br>
+            <% } %>
           </div>
-          <% } %>
-        </div>
-        <div class="section">
-          <% for (const event of locals.events) { %>
-          <%= JSON.stringify(event) %>
-          <hr />
-          <% } %>
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@
     "express-mysql-session": "^2.1.0",
     "express-session": "^1.16.1",
     "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "sequelize": "^5.8.4",
     "sequelize-cli": "^5.4.0"

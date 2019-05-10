@@ -1,4 +1,7 @@
 'use strict'
+const _ = require('lodash')
+const moment = require('moment')
+
 module.exports = (sequelize, DataTypes) => {
   const event = sequelize.define('Event', {
     event_id: {
@@ -44,6 +47,46 @@ module.exports = (sequelize, DataTypes) => {
     event.belongsTo(models.User, {
       foreignKey: 'organizer_id',
       onDelete: 'SET NULL',
+    })
+  }
+
+  // class functions
+  event.getAllGroupedByDay = function () {
+    return event.findAll({
+      order: sequelize.col('start_time'),
+      raw: true
+    }).then((events) => {
+      let day = 0
+      const retVal = _.chain(events)
+        .reduce((result, event, index) => {
+          const eventMoment = moment(event.start_time)
+          let sameDay = true
+          if (index > 0) {
+            sameDay = eventMoment.isSame(result[day].date, 'day')
+          }
+
+          if (!sameDay) {
+            day += 1
+          }
+
+          if (index == 0 || !sameDay) {
+            result[day] = {
+              date: eventMoment,
+              events: [event]
+            }
+          } else if (sameDay) {
+            result[day].events.push(event)
+          }
+          return result
+        }, [])
+        .map((day) => {
+          day.date = day.date.format('dddd, MMMM D')
+          return day
+        })
+        .value()
+
+      console.log(retVal)
+      return retVal
     })
   }
 
