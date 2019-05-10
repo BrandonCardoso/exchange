@@ -3,7 +3,6 @@ const session = require('express-session')
 const MySqlStore = require('express-mysql-session')(session)
 const mysql = require('mysql2')
 const bodyParser = require('body-parser')
-const middleware = require('./middleware')
 const config = require('../config/config')
 
 const app = express()
@@ -23,7 +22,6 @@ app.use(session({
   saveUninitialized: true,
   store: sessionStore
 }))
-app.use(middleware.user)
 
 const routes = require('./routes')(app)
 

@@ -10,6 +10,27 @@ function user(req, res, next) {
   next()
 }
 
+
+function roleRestrict(roles = []) {
+  return (req, res, next) => {
+    const restricted = _.chain(req)
+      .get('session.roles')
+      .intersectionWith(roles, (userRole, rolesVal) => {
+        return rolesVal === userRole.name
+      })
+      .size()
+      .isEqual(0)
+      .value()
+
+    if (restricted) {
+      res.send(403)
+    } else {
+      next()
+    }
+  }
+}
+
 module.exports = {
-  user
+  user,
+  roleRestrict
 }
