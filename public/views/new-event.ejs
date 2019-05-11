@@ -42,7 +42,7 @@
               </label>
             </div>
             <div class="field-body">
-              <div class="field is-grouped is-vcentered">
+              <div class="field is-grouped">
                 <div class="control">
                   <input class="input" type="date" name="eventDate" min="<%= moment().format('YYYY-MM-DD') %>" required>
                 </div>
@@ -69,16 +69,43 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <input class="input" type="text" name="eventLocation" required>
+                  <input class="input" type="search" id="address-input" placeholder="Address" required />
                 </div>
+              </div>
+              <div class="control">
+                <input class="input" type="text" name="eventRoom" placeholder="Room" required/>
               </div>
             </div>
           </div>
+          <input class="input is-invisible" type="text" id="address-value" name="eventLocation" required/>
           <div class="control">
             <button class="button is-primary" type="submit">Create</button>
           </div>
         </form>
       </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.16.4"></script>
+    <script>
+      (function() {
+        const placesAutocomplete = places({
+          appId: 'pl52ZR8GQBYS',
+          apiKey: 'ca74a144a09b6c97744ef6010f6e7b98',
+          container: document.querySelector('#address-input')
+        })
+
+        const address = document.querySelector('#address-value')
+        placesAutocomplete.on('change', function(e) {
+          address.value = JSON.stringify({
+            value: e.suggestion.value,
+            latlng: e.suggestion.latlng
+          })
+        });
+
+        placesAutocomplete.on('clear', function() {
+          address.value = null
+        });
+      })()
+    </script>
   </body>
 </html>

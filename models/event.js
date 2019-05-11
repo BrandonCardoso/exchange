@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     location: {
-      type: DataTypes.GEOMETRY('POINT'),
+      type: DataTypes.JSON,
       allowNull: false
     },
     created_at: {
@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       raw: true
     }).then((events) => {
       let day = 0
-      const retVal = _.chain(events)
+      return _.chain(events)
         .reduce((result, event, index) => {
           const eventMoment = moment(event.start_time)
           let sameDay = true
@@ -68,6 +68,8 @@ module.exports = (sequelize, DataTypes) => {
           if (!sameDay) {
             day += 1
           }
+
+          event.location = JSON.parse(event.location)
 
           if (index == 0 || !sameDay) {
             result[day] = {
@@ -84,9 +86,6 @@ module.exports = (sequelize, DataTypes) => {
           return day
         })
         .value()
-
-      console.log(retVal)
-      return retVal
     })
   }
 

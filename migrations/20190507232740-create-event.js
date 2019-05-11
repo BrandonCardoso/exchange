@@ -24,7 +24,7 @@ module.exports = {
       allowNull: false
     },
     location: {
-      type: Sequelize.GEOMETRY('POINT'),
+      type: Sequelize.JSON,
       allowNull: false
     },
     organizer_id: {
