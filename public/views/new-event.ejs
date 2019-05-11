@@ -7,34 +7,71 @@
       <div class="container">
         <p class="title">New Event</p>
         <form method="post" id="new-event-form">
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-              <input class="input" type="text" name="eventname" required>
+          <div class="field is-horizontal">
+            <div class="field-label"></div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input is-large" type="text" placeholder="Title" name="eventName" required>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="field">
-            <label class="label">Description</label>
-            <div class="control">
-              <textarea class="textarea" name="eventdescription"></textarea>
+          <div class="field is-horizontal">
+            <div class="field-label">
+              <label class="label">
+                <span class="icon is-medium">
+                  <i class="fas fa-quote-left fa-lg"></i>
+                </span>
+              </label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <textarea class="textarea" name="eventDescription" placeholder="Description"></textarea>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="field">
-            <label class="label">Start</label>
-            <div class="control">
-              <input class="input" type="text" name="eventstart" required>
+          <div class="field is-horizontal">
+            <div class="field-label">
+              <label class="label">
+                <span class="icon is-medium">
+                  <i class="far fa-clock fa-lg"></i>
+                </span>
+              </label>
+            </div>
+            <div class="field-body">
+              <div class="field is-grouped is-vcentered">
+                <div class="control">
+                  <input class="input" type="date" name="eventDate" min="<%= moment().format('YYYY-MM-DD') %>" required>
+                </div>
+                <div class="control">
+                  <input class="input" type="time" step="900" name="eventStartTime" required>
+                </div>
+                <div class="control">
+                  to
+                </div>
+                <div class="control">
+                  <input class="input" type="time" step="900" name="eventEndTime" required>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="field">
-            <label class="label">End</label>
-            <div class="control">
-              <input class="input" type="text" name="eventend" required>
+          <div class="field is-horizontal">
+            <div class="field-label">
+              <label class="label">
+                <span class="icon is-medium">
+                  <i class="fas fa-map-marker-alt fa-lg"></i>
+                </span>
+              </label>
             </div>
-          </div>
-          <div class="field">
-            <label class="label">Location</label>
-            <div class="control">
-              <input class="input" type="text" name="eventlocation" required>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input" type="text" name="eventLocation" required>
+                </div>
+              </div>
             </div>
           </div>
           <div class="control">

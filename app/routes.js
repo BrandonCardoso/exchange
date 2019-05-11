@@ -17,9 +17,10 @@ module.exports = (app) => {
 
   app.get('/new-event',
     roleRestrict(['Organizer', 'Admin']),
-    (req, res) => res.render('new-event'))
+    eventController.newEvent)
   app.post('/new-event',
     roleRestrict(['Organizer', 'Admin']),
+    eventController.createNewEvent,
     eventController.newEvent)
 
   app.get('/signup', userController.signup)

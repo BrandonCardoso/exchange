@@ -1,32 +1,42 @@
 const _ = require('lodash')
+const moment = require('moment')
 
 const User = require('../models').User
 const Event = require('../models').Event
 
+
 function newEvent(req, res) {
-  console.log('coordinates:', JSON.parse(_.get(req, 'body.eventlocation')))
+  res.render('new-event', {
+    moment
+  })
+}
+
+function createNewEvent(req, res, next) {
+  const eventDate = _.get(req, 'body.eventDate')
+  const startDateTime = moment(eventDate + ' ' + _.get(req, 'body.eventStartTime'))
+  const endDateTime = moment(eventDate + ' ' + _.get(req, 'body.eventEndTime'))
 
   Event.create({
-    name: _.get(req, 'body.eventname'),
-    description: _.get(req, 'body.eventdescription'),
-    start_time: _.get(req, 'body.eventstart'),
-    end_time: _.get(req, 'body.eventend'),
+    name: _.get(req, 'body.eventName'),
+    description: _.get(req, 'body.eventDescription'),
+    start_time: startDateTime.format(),
+    end_time: endDateTime.format(),
     location: {
       type: 'Point',
-      coordinates: JSON.parse(_.get(req, 'body.eventlocation'))
+      coordinates: JSON.parse(_.get(req, 'body.eventLocation'))
     },
     organizer_id: _.get(res, 'locals.user.user_id')
   })
   .then((event) => {
-    console.log(event)
     res.redirect('/')
   })
   .catch((err) => {
     console.error('Error creating event:', err)
-    res.render('new-event')
+    next()
   })
 }
 
 module.exports = {
-  newEvent
+  newEvent,
+  createNewEvent
 }
