@@ -3,7 +3,7 @@
     <div class="content">
       <div class="level is-marginless is-mobile">
         <div class="level-left">
-          <a href="/event/<%= event.event_id %>">
+          <a href="/event/<%= event.event_id %>/<%= event.urlSafeName %>">
             <h3 class="subtitle is-7 has-text-grey">
               <%= moment(event.start_time).format('h:mm A') %>
             </h3>

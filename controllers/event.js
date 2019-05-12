@@ -39,7 +39,16 @@ function createNewEvent(req, res, next) {
   })
 }
 
+function eventDetails(req, res) {
+  const temp = {
+    id: _.get(req, 'params.id'),
+    name: _.get(req, 'params.name')
+  }
+  res.json(temp)
+}
+
 module.exports = {
   newEvent,
-  createNewEvent
+  createNewEvent,
+  eventDetails
 }

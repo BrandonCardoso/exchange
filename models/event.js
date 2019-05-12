@@ -70,6 +70,7 @@ module.exports = (sequelize, DataTypes) => {
           }
 
           event.location = JSON.parse(event.location)
+          event.urlSafeName = getURLSafeName(event)
 
           if (index == 0 || !sameDay) {
             result[day] = {
@@ -90,4 +91,8 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   return event
+}
+
+function getURLSafeName(event) {
+  return (event.name).replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/ /g,'-')
 }

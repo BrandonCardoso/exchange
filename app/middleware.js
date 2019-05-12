@@ -30,7 +30,16 @@ function roleRestrict(roles = []) {
   }
 }
 
+function isLoggedIn(req, res, next) {
+  if (_.get(req, 'session.user')) {
+    next()
+  } else {
+    res.redirect('/signup')
+  }
+}
+
 module.exports = {
   user,
-  roleRestrict
+  roleRestrict,
+  isLoggedIn
 }
