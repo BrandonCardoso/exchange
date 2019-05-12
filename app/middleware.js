@@ -7,6 +7,15 @@ function user(req, res, next) {
   const roles = _.get(req, 'session.roles')
   _.set(res.locals, 'user', user)
   _.set(res.locals, 'roles', roles)
+  _.set(res.locals,
+    'userIsOrganizer',
+    _.chain(res)
+      .get(['locals', 'roles'], [])
+      .some((role) => {
+        return role.name === 'Organizer' || role.name === 'Admin'
+      })
+      .value())
+
   next()
 }
 

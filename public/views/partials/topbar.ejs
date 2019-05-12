@@ -24,8 +24,22 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
+          <% if (locals.userIsOrganizer) { %>
+          <div class="level-right">
+            <div class="level-item">
+              <a class="button is-primary is-outlined" href="/new-event">
+                <span class="icon">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span>New Event</span>
+              </a>
+            </div>
+          </div>
+          <% } %>
           <% if (typeof user !== 'undefined' && user) { %>
-          <%= user.first_name %>
+          <div class="navbar-item">
+            <%= user.first_name %>
+          </div>
           <hr class="navbar-divider">
           <a class=button is-light" href="/logout">Log out</a>
           <% } else { %>
