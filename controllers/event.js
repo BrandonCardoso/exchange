@@ -40,11 +40,26 @@ function createNewEvent(req, res, next) {
 }
 
 function eventDetails(req, res) {
-  const temp = {
-    id: _.get(req, 'params.id'),
-    name: _.get(req, 'params.name')
-  }
-  res.json(temp)
+  Event.findOne({
+    where: {
+      'event_id': _.get(req, 'params.id')
+    },
+    include: [{
+      model: User,
+      attributes: ['user_id', 'first_name', 'last_name']
+    }]
+  })
+  .then((event) => {
+    event.location = JSON.parse(event.location)
+
+    res.render('event-details', {
+      moment,
+      event
+    })
+  })
+  .catch((err) => {
+    console.error('Error getting event details:', err)
+  })
 }
 
 module.exports = {

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include partials/head %>
+  <body>
+    <% include partials/topbar %>
+    <section class="hero is-light">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="subtitle">
+            <%= moment(event.start_time).format("dddd, MMM D, YYYY") %>
+            <span class="is-invisible">"</span>
+          </h2>
+          <h1 class="title">
+            <%= event.name %>
+          </h1>
+          <h2 class="subtitle is-6">
+            Hosted by <%= event.User.first_name + ' ' + event.User.last_name %>
+          </h2>
+        </div>
+      </div>
+    </section>
+    <div class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-two-thirds">
+            <h1 class="title is-6">
+              Details
+            </h1>
+            <p>
+            <%= event.description %>
+            </p>
+          </div>
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-content">
+                <div class="field is-horizontal">
+                  <div class="field-label is-medium">
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span>
+                  </div>
+                  <div class="field-body">
+                    <%= moment(event.start_time).format('dddd, MMM D, YYYY') %>
+                    <br>
+                    <%= moment(event.start_time).format('h:mm A') %> to <%= moment(event.end_time).format('h:mm A') %>
+                  </div>
+                </div>
+                <div class="field is-horizontal is-marginless">
+                  <div class="field-label is-medium">
+                    <span class="icon">
+                      <i class="fas fa-map-marker-alt"></i>
+                    </span>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <a href="https://maps.google.com/?q=<%= event.location.latlng.lat %>,<%= event.location.latlng.lng %>" target="_blank">
+                        <%= event.location.address %>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="field is-horizontal">
+                  <div class="field-label is-medium"></div>
+                  <div class="field-body">
+                    <div class="field">
+                      <%= event.location.room %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-content is-paddingless">
+                <a href="https://maps.google.com/?q=<%= event.location.latlng.lat %>,<%= event.location.latlng.lng %>" target="_blank">
+                  <div style="height: 300px" id="map"></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var map
+      function initMap() {
+        const latlng = {
+          lat: <%= event.location.latlng.lat %>,
+          lng: <%= event.location.latlng.lng %>
+        }
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: latlng,
+          zoom: 16,
+          disableDefaultUI: true,
+          draggable: false,
+          clickableIcons: false
+        })
+
+        var marker = new google.maps.Marker({
+          position: latlng,
+          map: map
+        })
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvTpLbTbmNpdFT1tGT_u7qs7xOXL1UC6E&callback=initMap" async defer></script>
+  </body>
+</html>
