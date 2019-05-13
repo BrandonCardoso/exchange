@@ -58,6 +58,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       onDelete: 'CASCADE'
     })
+
+    User.belongsToMany(models.Group, {
+      through: 'Participants',
+      foreignKey: 'user_id',
+      onDelete: 'CASCADE'
+    })
   }
 
   // class functions
