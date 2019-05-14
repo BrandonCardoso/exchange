@@ -77,6 +77,33 @@
               </div>
             </div>
           </div>
+          <div class="field is-horizontal">
+            <div class="field-label">
+              <div class="label">
+                Number of Groups
+              </div>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div class="select"">
+                    <select name="eventNumGroups" id="eventNumGroups">
+                      <% for(let i = 0; i < maxNumGroups; i += 1) { %>
+                      <option value="<%= i+1 %>"><%=i + 1 %></option>
+                      <% } %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% for(let groupNum = 0; groupNum < maxNumGroups; groupNum += 1) { %>
+          <div id="group-<%= groupNum %>-field" style="display: none">
+            <div class="field is-horizontal">
+              group <%= groupNum %>
+            </div>
+          </div>
+          <% } %>
           <input class="input is-invisible" type="text" id="address-value" name="eventLocation" required/>
           <div class="control">
             <button class="button is-primary" type="submit">Create</button>
@@ -106,6 +133,27 @@
           address.value = null
         });
       })()
+    </script>
+
+    <script>
+      document.getElementById('eventNumGroups').addEventListener('change', function() {
+        toggleGroupFields(this.value)
+      })
+
+      function toggleGroupFields(max) {
+        for(let i = 0; i < <%= maxNumGroups %>; i += 1) {
+          const groupField = document.getElementById('group-' + i + '-field')
+          if (groupField) {
+            if (i >= max) {
+              groupField.style.display = "none"
+            } else {
+              groupField.style.display = ""
+            }
+          }
+        }
+      }
+
+      toggleGroupFields(<%= numGroups-1 %>)
     </script>
   </body>
 </html>

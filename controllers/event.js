@@ -5,8 +5,13 @@ const User = require('../models').User
 const Event = require('../models').Event
 
 function newEvent(req, res) {
+  const defaultNumGroups = 2
+  const maxNumGroups = 4
+
   res.render('new-event', {
-    moment
+    moment,
+    numGroups: defaultNumGroups,
+    maxNumGroups
   })
 }
 
