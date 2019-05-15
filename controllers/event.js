@@ -3,6 +3,7 @@ const moment = require('moment')
 
 const User = require('../models').User
 const Event = require('../models').Event
+const Group = require('../models').Group
 
 function newEvent(req, res) {
   const defaultNumGroups = 2
@@ -34,8 +35,23 @@ function createNewEvent(req, res, next) {
     end_time: endDateTime.format(),
     location: location,
     organizer_id: _.get(res, 'locals.user.user_id')
+  }, {
+    raw: true
   })
   .then((event) => {
+    const groupPromises = []
+    const numGroups = _.get(req, 'body.eventNumGroups', 0)
+    for (let i = 0; i < numGroups; i += 1) {
+      groupPromises.push(Group.create({
+        name: _.get(req, 'body.eventGroupName' + i),
+        max_participants: _.get(req, 'body.eventGroupMaxParticipants' + i),
+        event_id: event.event_id
+      }))
+    }
+
+    return Promise.all(groupPromises)
+  })
+  .then((groups) => {
     res.redirect('/')
   })
   .catch((err) => {

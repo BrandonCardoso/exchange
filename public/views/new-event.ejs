@@ -87,7 +87,7 @@
               <div class="field">
                 <div class="control">
                   <div class="select"">
-                    <select name="eventNumGroups" id="eventNumGroups">
+                    <select name="eventNumGroups" id="eventNumGroups" required>
                       <% for(let i = 0; i < maxNumGroups; i += 1) { %>
                       <option value="<%= i+1 %>"><%=i + 1 %></option>
                       <% } %>
@@ -98,9 +98,22 @@
             </div>
           </div>
           <% for(let groupNum = 0; groupNum < maxNumGroups; groupNum += 1) { %>
-          <div id="group-<%= groupNum %>-field" style="display: none">
-            <div class="field is-horizontal">
-              group <%= groupNum %>
+          <div id="group-<%= groupNum %>-field" style="display: none" class="field is-horizontal">
+            <div class="field-label">
+              <div class="label">
+                Group <%= groupNum + 1 %>
+              </div>
+            </div>
+            <div class="field-body">
+              <div class="field is-grouped">
+                <div class="control">
+                  <input class="input" type="text" name="eventGroupName<%= groupNum %>" placeholder="Group Name">
+                </div>
+                <div class="control">
+                  <input class="input" type="number" name="eventGroupMaxParticipants<%= groupNum %>"
+                                                     placeholder="Max participants" min="1" max="50">
+                </div>
+              </div>
             </div>
           </div>
           <% } %>
