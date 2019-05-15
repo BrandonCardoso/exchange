@@ -63,11 +63,14 @@ function createNewEvent(req, res, next) {
 function eventDetails(req, res) {
   Event.findOne({
     where: {
-      'event_id': _.get(req, 'params.id')
+      'event_id': _.get(req, 'params.id'),
     },
     include: [{
       model: User,
       attributes: ['user_id', 'first_name', 'last_name']
+    }, {
+      model: Group,
+      attributes: ['group_id', 'name', 'max_participants']
     }]
   })
   .then((event) => {

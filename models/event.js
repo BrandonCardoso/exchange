@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'organizer_id',
       onDelete: 'SET NULL',
     })
+
+    event.hasMany(models.Group, {
+      foreignKey: 'event_id'
+    })
   }
 
   // class functions

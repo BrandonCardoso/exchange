@@ -78,6 +78,28 @@
         </div>
       </div>
     </div>
+    <div class="section" style="padding-top: 0">
+      <div class="container">
+        <div class="columns is-centered is-multiline">
+          <% event.Groups.forEach((group) => { %>
+          <div class="column">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                <%= group.name %>
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <%= JSON.stringify(group) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
 
     <script>
       var map
