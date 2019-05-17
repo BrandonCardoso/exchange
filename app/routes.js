@@ -23,6 +23,8 @@ module.exports = (app) => {
     roleRestrict(['Organizer', 'Admin']),
     eventController.createNewEvent,
     eventController.newEvent)
+  app.get('/event/join/:groupId', isLoggedIn, eventController.joinGroup)
+  app.get('/event/leave/:groupId', isLoggedIn, eventController.leaveGroup)
 
   app.get('/event/:id/:name?', isLoggedIn, eventController.eventDetails)
 
