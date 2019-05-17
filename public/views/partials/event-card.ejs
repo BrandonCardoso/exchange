@@ -11,6 +11,7 @@
             <h3 class="subtitle is-7 has-text-grey"><%= event.location.address + (event.location.room ? '  -  Room: ' + event.location.room:'') %></h3>
           </a>
         </div>
+        <% if (event.userIsParticipating) { %>
         <div class="level-right">
           <div class="level-item">
             <span class="title is-7 has-text-success is-uppercase">Going!</span>
@@ -20,6 +21,7 @@
             </span>
           </div>
         </div>
+        <% } %>
       </div>
       <p><%= event.description %></p>
     </div>

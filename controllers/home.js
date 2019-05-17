@@ -6,9 +6,21 @@ const Event = require('../models').Event
 
 function home(req, res, next) {
   Event.getAllGroupedByDay()
-    .then((events) => {
+    .then((eventsByDay) => {
+      const activeUserId = _.get(req, 'session.user.user_id')
+
+      _.each(eventsByDay, (day) => {
+        _.each(day.events, (event) => {
+          _.each(event.Groups, (group) => {
+            event.userIsParticipating = _.some(group.Users, (user) => {
+              return user.user_id === activeUserId
+            })
+          })
+        })
+      })
+
       res.render('index', {
-        events,
+        events: eventsByDay,
         moment
       })
     })

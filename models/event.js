@@ -58,7 +58,14 @@ module.exports = (sequelize, DataTypes) => {
   event.getAllGroupedByDay = function () {
     return event.findAll({
       order: sequelize.col('start_time'),
-      raw: true
+      include: [{
+        model: sequelize.models.Group,
+        attributes: ['group_id'],
+        include: [{
+          model: sequelize.models.User,
+          attributes: ['user_id']
+        }]
+      }]
     }).then((events) => {
       let day = 0
       return _.chain(events)
