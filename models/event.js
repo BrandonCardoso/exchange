@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         attributes: ['group_id'],
         include: [{
           model: sequelize.models.User,
+          as: 'participants',
           attributes: ['user_id']
         }]
       }]

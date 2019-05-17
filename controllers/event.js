@@ -73,10 +73,8 @@ function eventDetails(req, res) {
       attributes: ['group_id', 'name', 'max_participants'],
       include: [{
         model: User,
+        as: 'participants',
         attributes: ['user_id', 'first_name', 'last_name'],
-        through: {
-          attributes: []
-        }
       }]
     }]
   })
@@ -87,7 +85,7 @@ function eventDetails(req, res) {
     const userInEvent = _.chain(event)
       .get('Groups')
       .some((group) => {
-        return _.some(group.Users, (user) => {
+        return _.some(group.participants, (user) => {
           if (user.user_id === userId) {
             userGroup = group.group_id
             return true
@@ -120,7 +118,7 @@ function joinGroup(req, res) {
     where: { 'group_id': groupId },
   })
   .then((group) => {
-    return group.addUser(userId)
+    return group.addParticipant(userId)
   })
   .then((participant) => {
     res.redirect('back')
@@ -138,7 +136,7 @@ function leaveGroup(req, res) {
     where: { 'group_id': groupId },
   })
   .then((group) => {
-    return group.removeUser(userId)
+    return group.removeParticipant(userId)
   })
   .then((participant) => {
     res.redirect('back')

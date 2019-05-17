@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 
     group.belongsToMany(models.User, {
       through: 'Participants',
+      as: 'participants',
       foreignKey: 'group_id',
       onDelete: 'CASCADE'
     })
