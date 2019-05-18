@@ -17,7 +17,10 @@
                   <%= event.name %>
                 </h1>
                 <h2 class="subtitle is-6">
-                  Hosted by <%= event.organizer.first_name + ' ' + event.organizer.last_name %>
+                  Hosted by
+                  <a href="/user/<%= event.organizer.user_id %>">
+                    <%= event.organizer.first_name + ' ' + event.organizer.last_name %>
+                  </a>
                 </h2>
               </div>
             </div>
@@ -149,14 +152,16 @@
                   <div class="columns is-multiline">
                     <% group.participants.forEach(function(participant) { %>
                     <div class="column is-narrow">
-                      <div class="box">
-                        <div class="title is-6">
-                        <%= participant.first_name + ' ' + participant.last_name %>
+                      <a href="/user/<%= participant.user_id %>">
+                        <div class="box">
+                          <div class="title is-6">
+                            <%= participant.first_name + ' ' + participant.last_name %>
+                          </div>
+                          <div class="subtitle is-7">
+                            <%= moment(participant.Participants.createdAt).format('MMM D, h:mm A') %>
+                          </div>
                         </div>
-                        <div class="subtitle is-7">
-                          <%= moment(participant.Participants.createdAt).format('MMM D, h:mm A') %>
-                        </div>
-                      </div>
+                      </a>
                     </div>
                     <% }) %>
                   </div>

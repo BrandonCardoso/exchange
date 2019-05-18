@@ -1,6 +1,8 @@
 const _ = require('lodash')
+const moment = require('moment')
 
 const User = require('../models').User
+const Role = require('../models').Role
 
 function login(req, res) {
   res.render('login')
@@ -73,10 +75,33 @@ function registerUser(req, res, next) {
   })
 }
 
+function profile(req, res) {
+  const userId = _.get(req, 'params.userId')
+  User.findOne({
+    where: { 'user_id': userId },
+    attributes: {
+      exclude: ['password']
+    },
+    include: [{
+      model: Role
+    }]
+  })
+  .then((user) => {
+    const userIsOrganizer = _.some(user.Roles, (role) => role.name === 'Organizer')
+
+    res.render('profile', {
+      moment,
+      user,
+      userIsOrganizer
+    })
+  })
+}
+
 module.exports = {
   login,
   logout,
   signup,
   registerUser,
-  authenticate
+  authenticate,
+  profile
 }

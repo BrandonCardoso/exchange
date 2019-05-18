@@ -33,4 +33,5 @@ module.exports = (app) => {
   app.get('/login', userController.login)
   app.post('/login', userController.authenticate, userController.login)
   app.get('/logout', userController.logout)
+  app.get('/user/:userId', isLoggedIn, userController.profile)
 }

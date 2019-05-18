@@ -32,7 +32,9 @@
 
       <% if (typeof user !== 'undefined' && user) { %>
       <div class="navbar-item">
-        <%= user.first_name %>
+        <a href="/user/<%= user.user_id %>">
+          <%= user.first_name %>
+        </a>
       </div>
       <div class="navbar-item">
         <a class=button is-light" href="/logout">Log out</a>
