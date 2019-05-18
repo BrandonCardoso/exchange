@@ -6,17 +6,60 @@
     <section class="hero is-light">
       <div class="hero-body">
         <div class="container">
-          <h2 class="subtitle">
-            <%= moment(event.start_time).format("dddd, MMM D, YYYY") %>
-            <span class="is-invisible">"</span>
-          </h2>
-          <h1 class="title">
-            <%= event.name %>
-          </h1>
-          <h2 class="subtitle is-6">
-            Hosted by <%= event.User.first_name + ' ' + event.User.last_name %>
-          </h2>
+          <div class="level">
+            <div class="level-left">
+              <div class="content">
+                <h2 class="subtitle is-5">
+                  <%= moment(event.start_time).format("dddd, MMM D, YYYY") %>
+                  <span class="is-invisible">"</span>
+                </h2>
+                <h1 class="title">
+                  <%= event.name %>
+                </h1>
+                <h2 class="subtitle is-6">
+                  Hosted by <%= event.User.first_name + ' ' + event.User.last_name %>
+                </h2>
+              </div>
+            </div>
+            <div class="level-right">
+              <% if (!userInEvent) { %>
+              <div class="level-item level is-mobile">
+                <div class="level-item has-text-centered is-narrow">
+                  <div class="content">
+                    <div class="title is-6 is-marginless">
+                      Want to participate?
+                    </div>
+                    <p>Join a group below!</p>
+                  </div>
+                </div>
+                <div class="level-item is-narrow">
+                  <a href="#groups" class="button is-large is-info">
+                    <span class="icon">
+                      <i class="fa fa-arrow-down"></i>
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <% } else { %>
+              <div class="level-item level is-mobile">
+                <div class="level-item has-text-centered is-narrow" style="margin-right:0.75rem">
+                  <div class="content">
+                    <div class="title is-6 is-marginless">
+                      You're going!
+                    </div>
+                  </div>
+                </div>
+                <div class="level-item is-narrow">
+                  <span class="icon is-large has-text-success">
+                    <i class="fas fa-3x fa-check"></i>
+                  </span>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
         </div>
+      </div>
       </div>
     </section>
     <div class="section">
@@ -78,6 +121,7 @@
         </div>
       </div>
     </div>
+    <a id="groups"></a>
     <div class="section" style="padding-top: 0">
       <div class="container">
         <div class="columns is-centered is-multiline">
@@ -102,7 +146,20 @@
               </header>
               <div class="card-content">
                 <div class="content">
-                  <%= JSON.stringify(group.participants) %>
+                  <div class="columns is-multiline">
+                    <% group.participants.forEach(function(participant) { %>
+                    <div class="column is-narrow">
+                      <div class="box">
+                        <div class="title is-6">
+                        <%= participant.first_name + ' ' + participant.last_name %>
+                        </div>
+                        <div class="subtitle is-7">
+                          <%= moment(participant.Participants.createdAt).format('MMM D, h:mm A') %>
+                        </div>
+                      </div>
+                    </div>
+                    <% }) %>
+                  </div>
                 </div>
               </div>
             </div>
