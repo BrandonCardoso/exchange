@@ -11,10 +11,11 @@ function home(req, res, next) {
 
       _.each(eventsByDay, (day) => {
         _.each(day.events, (event) => {
-          _.each(event.Groups, (group) => {
+          _.some(event.Groups, (group) => {
             event.userIsParticipating = _.some(group.participants, (participant) => {
               return participant.user_id === activeUserId
             })
+            return event.userIsParticipating
           })
         })
       })
