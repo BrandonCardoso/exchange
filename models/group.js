@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   group.associate = function(models) {
     group.belongsTo(models.Event, {
       foreignKey: 'event_id',
+      as: 'event',
       allowNull: false,
       onDelete: 'CASCADE'
     })

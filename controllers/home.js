@@ -11,7 +11,7 @@ function home(req, res, next) {
 
       _.each(eventsByDay, (day) => {
         _.each(day.events, (event) => {
-          _.some(event.Groups, (group) => {
+          _.some(event.groups, (group) => {
             event.userIsParticipating = _.some(group.participants, (participant) => {
               return participant.user_id === activeUserId
             })

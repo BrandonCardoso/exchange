@@ -68,7 +68,7 @@ function eventDetails(req, res) {
 
       let userGroup = -1
       const userInEvent = _.chain(event)
-        .get('Groups')
+        .get('groups')
         .some((group) => {
           return _.some(group.participants, (user) => {
             if (user.user_id === userId) {

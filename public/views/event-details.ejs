@@ -17,7 +17,7 @@
                   <%= event.name %>
                 </h1>
                 <h2 class="subtitle is-6">
-                  Hosted by <%= event.User.first_name + ' ' + event.User.last_name %>
+                  Hosted by <%= event.organizer.first_name + ' ' + event.organizer.last_name %>
                 </h2>
               </div>
             </div>
@@ -125,7 +125,7 @@
     <div class="section" style="padding-top: 0">
       <div class="container">
         <div class="columns is-centered is-multiline">
-          <% event.Groups.forEach(function(group) { %>
+          <% event.groups.forEach(function(group) { %>
           <div class="column">
             <div class="card">
               <header class="card-header">

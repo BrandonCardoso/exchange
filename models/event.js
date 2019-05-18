@@ -46,11 +46,13 @@ module.exports = (sequelize, DataTypes) => {
   event.associate = (models) => {
     event.belongsTo(models.User, {
       foreignKey: 'organizer_id',
+      as: 'organizer',
       onDelete: 'SET NULL',
     })
 
     event.hasMany(models.Group, {
-      foreignKey: 'event_id'
+      foreignKey: 'event_id',
+      as: 'groups'
     })
   }
 
@@ -59,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
     return event.findAll({
       order: sequelize.col('start_time'),
       include: [{
-        model: sequelize.models.Group,
+        association: 'groups',
         attributes: ['group_id'],
         include: [{
           model: sequelize.models.User,
@@ -108,17 +110,20 @@ module.exports = (sequelize, DataTypes) => {
         'event_id': eventId
       },
       include: [{
-        model: sequelize.models.User,
+        association: 'organizer',
         attributes: ['user_id', 'first_name', 'last_name']
       }, {
-        model: sequelize.models.Group,
-        attributes: ['group_id', 'name', 'max_participants'],
+        association: 'groups',
+        attributes: ['group_id', 'name', 'max_participants', 'created_at'],
         include: [{
-          model: sequelize.models.User,
-          as: 'participants',
-          attributes: ['user_id', 'first_name', 'last_name'],
-        }]
-      }]
+          association: 'participants',
+          attributes: ['user_id', 'first_name', 'last_name']
+        }],
+      }],
+      order: [
+        [ sequelize.literal('`groups.name`'), 'asc' ],
+        [ sequelize.literal('`groups.participants.Participants.createdAt`'), 'asc']
+      ]
     })
   }
 
