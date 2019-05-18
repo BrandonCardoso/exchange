@@ -38,76 +38,61 @@ function createNewEvent(req, res, next) {
   }, {
     raw: true
   })
-  .then((event) => {
-    const groupPromises = []
-    const numGroups = _.get(req, 'body.eventNumGroups', 0)
-    for (let i = 0; i < numGroups; i += 1) {
-      groupPromises.push(Group.create({
-        name: _.get(req, 'body.eventGroupName' + i),
-        max_participants: _.get(req, 'body.eventGroupMaxParticipants' + i),
-        event_id: event.event_id
-      }))
-    }
+    .then((event) => {
+      const groupPromises = []
+      const numGroups = _.get(req, 'body.eventNumGroups', 0)
+      for (let i = 0; i < numGroups; i += 1) {
+        groupPromises.push(Group.create({
+          name: _.get(req, 'body.eventGroupName' + i),
+          max_participants: _.get(req, 'body.eventGroupMaxParticipants' + i),
+          event_id: event.event_id
+        }))
+      }
 
-    return Promise.all(groupPromises)
-  })
-  .then((groups) => {
-    res.redirect('/')
-  })
-  .catch((err) => {
-    console.error('Error creating event:', err)
-    next()
-  })
+      return Promise.all(groupPromises)
+    })
+    .then((groups) => {
+      res.redirect('/')
+    })
+    .catch((err) => {
+      console.error('Error creating event:', err)
+      next()
+    })
 }
 
 function eventDetails(req, res) {
-  Event.findOne({
-    where: {
-      'event_id': _.get(req, 'params.id'),
-    },
-    include: [{
-      model: User,
-      attributes: ['user_id', 'first_name', 'last_name']
-    }, {
-      model: Group,
-      attributes: ['group_id', 'name', 'max_participants'],
-      include: [{
-        model: User,
-        as: 'participants',
-        attributes: ['user_id', 'first_name', 'last_name'],
-      }]
-    }]
-  })
-  .then((event) => {
-    const userId = _.get(req, 'session.user.user_id')
+  const eventId = _.get(req, 'params.eventId')
+  Event.getEventDetails(eventId)
+    .then((event) => {
+      const userId = _.get(req, 'session.user.user_id')
 
-    let userGroup = -1
-    const userInEvent = _.chain(event)
-      .get('Groups')
-      .some((group) => {
-        return _.some(group.participants, (user) => {
-          if (user.user_id === userId) {
-            userGroup = group.group_id
-            return true
-          } else {
-            return false
-          }
+      let userGroup = -1
+      const userInEvent = _.chain(event)
+        .get('Groups')
+        .some((group) => {
+          return _.some(group.participants, (user) => {
+            if (user.user_id === userId) {
+              userGroup = group.group_id
+              return true
+            } else {
+              return false
+            }
+          })
         })
+        .value()
+
+      event.location = JSON.parse(event.location)
+
+      res.render('event-details', {
+        moment,
+        event,
+        userGroup,
+        userInEvent
       })
-      .value()
-
-    event.location = JSON.parse(event.location)
-
-    res.render('event-details', {
-      moment,
-      event,
-      userGroup,
-      userInEvent
     })
-  })
-  .catch((err) => {
-    console.error('Error getting event details:', err)
-  })
+    .catch((err) => {
+      console.error('Error getting event details:', err)
+    })
 }
 
 function joinGroup(req, res) {
@@ -117,15 +102,15 @@ function joinGroup(req, res) {
   return Group.findOne({
     where: { 'group_id': groupId },
   })
-  .then((group) => {
-    return group.addParticipant(userId)
-  })
-  .then((participant) => {
-    res.redirect('back')
-  })
-  .catch((err) => {
-    console.error(err)
-  })
+    .then((group) => {
+      return group.addParticipant(userId)
+    })
+    .then((participant) => {
+      res.redirect('back')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 function leaveGroup(req, res) {
@@ -135,15 +120,15 @@ function leaveGroup(req, res) {
   return Group.findOne({
     where: { 'group_id': groupId },
   })
-  .then((group) => {
-    return group.removeParticipant(userId)
-  })
-  .then((participant) => {
-    res.redirect('back')
-  })
-  .catch((err) => {
-    console.error(err)
-  })
+    .then((group) => {
+      return group.removeParticipant(userId)
+    })
+    .then((participant) => {
+      res.redirect('back')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 module.exports = {

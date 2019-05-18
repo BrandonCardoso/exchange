@@ -102,6 +102,26 @@ module.exports = (sequelize, DataTypes) => {
     })
   }
 
+  event.getEventDetails = function (eventId) {
+    return event.findOne({
+      where: {
+        'event_id': eventId
+      },
+      include: [{
+        model: sequelize.models.User,
+        attributes: ['user_id', 'first_name', 'last_name']
+      }, {
+        model: sequelize.models.Group,
+        attributes: ['group_id', 'name', 'max_participants'],
+        include: [{
+          model: sequelize.models.User,
+          as: 'participants',
+          attributes: ['user_id', 'first_name', 'last_name'],
+        }]
+      }]
+    })
+  }
+
   return event
 }
 

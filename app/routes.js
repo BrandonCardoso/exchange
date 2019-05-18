@@ -26,7 +26,7 @@ module.exports = (app) => {
   app.get('/event/join/:groupId', isLoggedIn, eventController.joinGroup)
   app.get('/event/leave/:groupId', isLoggedIn, eventController.leaveGroup)
 
-  app.get('/event/:id/:name?', isLoggedIn, eventController.eventDetails)
+  app.get('/event/:eventId/:eventName?', isLoggedIn, eventController.eventDetails)
 
   app.get('/signup', userController.signup)
   app.post('/signup', userController.registerUser, userController.signup)
