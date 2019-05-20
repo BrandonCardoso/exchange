@@ -5,25 +5,22 @@
         <div class="level-left">
           <a href="/event/<%= event.event_id %>/<%= event.urlSafeName %>">
             <h3 class="subtitle is-7 has-text-grey">
-              <%= moment(event.start_time).format('h:mm A') %>
+              <%= moment(event.start_time).format('h:mm A') %><span class="is-hidden">'</span>
             </h3>
             <h1 class="title is-5"><%= event.name %></h1>
             <h3 class="subtitle is-7 has-text-grey"><%= event.location.address + (event.location.room ? '  -  Room: ' + event.location.room:'') %></h3>
           </a>
         </div>
-        <% if (event.userIsParticipating) { %>
         <div class="level-right">
-          <div class="level-item">
-            <span class="title is-7 has-text-success is-uppercase">Going!</span>
-            &nbsp;
-            <span class="icon is-medium">
-              <i class="far fa-2x fa-check-circle has-text-success"></i>
-            </span>
+          <div class="level-item tags">
+            <span class="tag is-light"> <%= event.numParticipants %> <%= event.numParticipants === 1 ? 'person' : 'people' %> going</span>
+            <% if (event.userIsParticipating) { %>
+            <span class="tag is-success">You're going!</span>
+            <% } %>
           </div>
         </div>
-        <% } %>
       </div>
-      <p><%= event.description %></p>
     </div>
+    <p><%= event.description %></p>
   </div>
 </div>

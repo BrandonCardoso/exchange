@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
       order: sequelize.col('start_time'),
       include: [{
         association: 'groups',
-        attributes: ['group_id'],
+        attributes: ['group_id', 'max_participants'],
         include: [{
           model: sequelize.models.User,
           as: 'participants',

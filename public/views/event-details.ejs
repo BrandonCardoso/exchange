@@ -10,8 +10,7 @@
             <div class="level-left">
               <div class="content">
                 <h2 class="subtitle is-5">
-                  <%= moment(event.start_time).format("dddd, MMM D, YYYY") %>
-                  <span class="is-invisible">"</span>
+                  <%= moment(event.start_time).format("dddd, MMM D, YYYY") %><span class="is-hidden">"</span>
                 </h2>
                 <h1 class="title">
                   <%= event.name %>
@@ -133,15 +132,21 @@
             <div class="card">
               <header class="card-header">
                 <p class="card-header-title">
-                <%= group.name %>
+                <span>
+                  <%= group.name %>
+                </span>&nbsp;
+                <span class="tag is-light">
+                  <%= group.participants.length %>/<%= group.max_participants %> <%= group.participants.length === 1 ? 'person' : 'people' %> going
+                </span>
                 </p>
-                <span class="card-header-icon">
+                <span class="card-header-icon tags">
                   <% if (!(group.group_id === userGroup) && !userInEvent) { %>
-                  <a class="is-text-success" href="/event/join/<%= group.group_id %>">
+                  <a class="tag is-primary" href="/event/join/<%= group.group_id %>">
                     Join
                   </a>
                   <% } else if (group.group_id === userGroup) { %>
-                  <a class="is-text-danger" href="/event/leave/<%= group.group_id %>">
+                  <span class="tag is-success">You're going!</span>
+                  <a class="tag is-light" href="/event/leave/<%= group.group_id %>">
                     Leave
                   </a>
                   <% } %>
