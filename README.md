@@ -13,7 +13,7 @@ npm install
 ```
 4. Install [MariaDB](https://mariadb.org/)
 5. Setup the `config.json` file in `exchange/config` to connect to your local SQL instance. (look at `config-example.json`)
-6 .Create the `exchange_dev` database
+6. Create the `exchange_dev` database with the username & password you set in `config.json`
 7. Run the SequelizeJS migrations and seeders to create the tables and insert test data.
 ```
 npx sequelize-cli db:migrate
