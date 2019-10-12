@@ -1,16 +1,25 @@
 # exchange
----
 
-## Setup
-* Install [Node.js](https://nodejs.org/en/) 
-* Clone the repo with `git clone git@github.com:BrandonCardoso/exchange.git`
-* `cd` into the repo directory and run `npm install`
+### Setup
+1. Install [Node.js](https://nodejs.org/en/) 
+2. Clone the repo
+```git clone git@github.com:BrandonCardoso/exchange.git```
+3. Install node modules
+```
+cd exchange
+npm install
+```
+4. Install [MariaDB](https://mariadb.org/)
+5. Setup the `config.json` file in `exchange/config` to connect to your local SQL instance. (look at `config-example.json`)
+6 .Create the `exchange_dev` database
+7. Run the SequelizeJS migrations and seeders to create the tables and insert test data.
+```
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
+```
+8. Run the site locally
+```
+npm start
+```
 
-* Install [MariaDB](https://mariadb.org/)
-* Setup the `config.json` file in `exchange/config` to connect to your local SQL instance. (look at `config-example.json`)
-* Create the `exchange_dev` database
-* Run the SequelizeJS migrations to create the tables `npx sequelize-cli db:migrate`
-* Run the SequelizeJS seeders to insert test/sample data `npx sequelize-cli db:seed:all`
-
-* Run the site locally with `npm start`
-* Site should load from http://127.0.0.1:3000
+Site should load from http://locahost:3000
