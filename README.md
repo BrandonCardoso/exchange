@@ -3,7 +3,9 @@
 ### Setup
 1. Install [Node.js](https://nodejs.org/en/) 
 2. Clone the repo
-```git clone git@github.com:BrandonCardoso/exchange.git```
+```
+git clone git@github.com:BrandonCardoso/exchange.git
+```
 3. Install node modules
 ```
 cd exchange
