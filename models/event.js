@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
             day += 1
           }
 
-          event.location = JSON.parse(event.location)
+          event.location = typeof event.location === 'string' ? JSON.parse(event.location) : event.location
           event.urlSafeName = getURLSafeName(event)
 
           if (index == 0 || !sameDay) {
