@@ -24,4 +24,4 @@ npx sequelize-cli db:seed:all
 npm start
 ```
 
-Site should load from http://locahost:3000
+Site should load from http://localhost:3000
