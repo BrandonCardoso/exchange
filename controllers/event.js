@@ -81,7 +81,7 @@ function eventDetails(req, res) {
         })
         .value()
 
-      event.location = JSON.parse(event.location)
+      event.location = typeof event.location === 'string' ? JSON.parse(event.location) : event.location
 
       res.render('event-details', {
         moment,
